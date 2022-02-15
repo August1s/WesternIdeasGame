@@ -51,8 +51,5 @@ public class SearchCardFunctionManager : MonoSingleton<SearchCardFunctionManager
         ArenaManager.instance.cardsInHandArea.Add(mainCard);
         CardAreaUIEventManager.instance.HandCardAddEvent.Invoke(mainCard);
 
-        //GameObject newCard = GameObject.Instantiate(handCardPrefab, handCardStore.transform);
-        //newCard.GetComponent<CardEffect>().mainCard = mainCard;
-        //newCard.GetComponent<CardDisplay>().mainCard = mainCard;  
     }
 }

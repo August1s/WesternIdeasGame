@@ -19,8 +19,10 @@ public class CardEffect : MonoBehaviour
 
     public void CardEffectExecution()
     {
-        // 卡牌效果执行
-        HandCardFunctionManager.instance.CardEffectLaunchEvent.Invoke(gameObject, mainCard);
-        //Destroy(gameObject);
+        if(ArenaManager.instance.gamePhase == GamePhase.PlayerRoundBegin)
+        {
+            // 卡牌效果执行
+            HandCardFunctionManager.instance.CardEffectLaunchEvent.Invoke(gameObject, mainCard);
+        }
     }
 }

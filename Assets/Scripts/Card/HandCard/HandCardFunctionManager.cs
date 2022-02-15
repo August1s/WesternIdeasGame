@@ -23,7 +23,11 @@ public class HandCardFunctionManager : MonoSingleton<HandCardFunctionManager>
         {
             ArenaManager.instance.player.lifeValue -= mainCard.lifeValueCost;
             if (ArenaManager.instance.player.lifeValue == 0)
-                Debug.Log("死");
+            {
+                ArenaManager.instance.gamePhase = GamePhase.GameEnd;
+                Debug.Log("----游戏结束----");
+            }
+                
 
             ArenaManager.instance.player.actionValue -= mainCard.actionValueCost;
             ArenaManager.instance.player.spiritValue -= mainCard.spiritValueCost;
@@ -45,11 +49,13 @@ public class HandCardFunctionManager : MonoSingleton<HandCardFunctionManager>
             
 
             ArenaManager.instance.cardsInHandArea.Remove(mainCard);
-            // CardAreaUIEventManager.instance.CardRemoveEvent.Invoke(cardObj);
-            CardAreaUIEventManager.instance.HandCardsAreaRefreshEvent.Invoke();
+            CardAreaUIEventManager.instance.CardRemoveEvent.Invoke(cardObj);
+            //CardAreaUIEventManager.instance.HandCardsAreaRefreshEvent.Invoke();
 
             ArenaManager.instance.dropCards.Add(mainCard);
             CardAreaUIEventManager.instance.DropCardAddEvent.Invoke(mainCard);
+
+            CardAreaUIEventManager.instance.OtherCardAreaCountUpdateEvent.Invoke(ArenaManager.instance.player.cardsInPlayerBag.Count, ArenaManager.instance.discardArea.Count);
         }
         else
         {
@@ -71,7 +77,10 @@ public class HandCardFunctionManager : MonoSingleton<HandCardFunctionManager>
         ArenaManager.instance.player.lifeValue += Mathf.Min(
             lifeEffect, ArenaManager.instance.player.maxLifeValue - ArenaManager.instance.player.lifeValue);
         if (ArenaManager.instance.player.lifeValue <= 0)
-            Debug.Log("死");
+        {
+            ArenaManager.instance.gamePhase = GamePhase.GameEnd;
+            Debug.Log("----游戏结束----");
+        }
 
         ArenaManager.instance.player.actionValue += Mathf.Max(
             -ArenaManager.instance.player.actionValue,
@@ -99,13 +108,16 @@ public class HandCardFunctionManager : MonoSingleton<HandCardFunctionManager>
     {
         ArenaManager.instance.enemy.lifeValue -= damageEffect;
         if (ArenaManager.instance.enemy.lifeValue <= 0)
-            Debug.Log("胜利");
+        {
+            ArenaManager.instance.gamePhase = GamePhase.GameEnd;
+            Debug.Log("----游戏结束----");
+        }
     }
 
     /// <summary>
     /// 手牌影响，依照抽卡数量，将player背包中（剩余牌堆）中的卡移动到手牌中
     /// 
-    /// 如果剩余牌堆中已经没有足够抽的牌，那么先将牌抽取掉，然后洗切废牌堆作为新的牌堆，再进行抽取？
+    /// 如果剩余牌堆中已经没有足够抽的牌，那么先将牌抽取掉，然后洗切废牌堆作为新的牌堆，再进行抽取
     /// </summary>
     /// <param name="drawNewCard">抽卡数量</param>
     public void HandCardEffect(int drawNewCard)

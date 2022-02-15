@@ -14,7 +14,7 @@ public class EnemyUIEventManager : MonoSingleton<EnemyUIEventManager>
 
     public UnityEvent<Enemy> EnemyValueChangeEvent = new UnityEvent<Enemy>();
 
-    public void ShowEnemy(Enemy enemy)
+    private void ShowEnemy(Enemy enemy)
     {
         enemyName.text = enemy.name;
         lifeText.text = enemy.lifeValue.ToString();

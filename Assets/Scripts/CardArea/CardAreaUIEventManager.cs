@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
 
 
@@ -30,11 +31,14 @@ public class CardAreaUIEventManager : MonoSingleton<CardAreaUIEventManager>
     public UnityEvent<Card> DropCardAddEvent = new UnityEvent<Card>();
 
     public UnityEvent<GameObject> CardRemoveEvent = new UnityEvent<GameObject>();
+    public UnityEvent CardRemoveAllEvent = new UnityEvent();
+
+    public Text areaCount;
+    public UnityEvent<int, int> OtherCardAreaCountUpdateEvent = new UnityEvent<int, int>();
 
 
 
-
-    public void ClearGrid(GameObject store)
+    private void ClearGridInOneFrame(GameObject store)
     {
         if (store.transform.childCount > 0)
         {
@@ -45,9 +49,29 @@ public class CardAreaUIEventManager : MonoSingleton<CardAreaUIEventManager>
         }
     }
 
-    public void CreateHandCardPrefabInGrid()
+    /// <summary>
+    /// 清除台面上所有的卡牌
+    /// </summary>
+    private void ClearAllCard()
     {
-        ClearGrid(handCardStore);
+        for (int i = handCardStore.transform.childCount - 1; i >= 0; i--)
+        { 
+            Destroy(handCardStore.transform.GetChild(i).gameObject);
+        }
+        for (int i = dropCardStore.transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(dropCardStore.transform.GetChild(i).gameObject);
+        }
+        for (int i = searchCardStore.transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(searchCardStore.transform.GetChild(i).gameObject);
+        }
+
+    }
+
+    private void CreateHandCardPrefabInGrid()
+    {
+        ClearGridInOneFrame(handCardStore);
 
         foreach (var item in ArenaManager.instance.cardsInHandArea)
         {
@@ -57,9 +81,9 @@ public class CardAreaUIEventManager : MonoSingleton<CardAreaUIEventManager>
         }
     }
 
-    public void CreateSearchCardPrefabInGrid()
+    private void CreateSearchCardPrefabInGrid()
     {
-        ClearGrid(searchCardStore);
+        ClearGridInOneFrame(searchCardStore);
 
         foreach (var item in ArenaManager.instance.cardsInSearchArea)
         {
@@ -69,9 +93,9 @@ public class CardAreaUIEventManager : MonoSingleton<CardAreaUIEventManager>
         }
     }
 
-    public void CreateDropCardPrefabInGrid()
+    private void CreateDropCardPrefabInGrid()
     {
-        ClearGrid(dropCardStore);
+        ClearGridInOneFrame(dropCardStore);
 
         foreach (var item in ArenaManager.instance.dropCards)
         {
@@ -80,22 +104,28 @@ public class CardAreaUIEventManager : MonoSingleton<CardAreaUIEventManager>
         }
     }
 
-    public void AddHandCardPrefab(Card card)
+    private void AddHandCardPrefab(Card card)
     {
         GameObject newCard = GameObject.Instantiate(handCardPrefab, handCardStore.transform);
         newCard.GetComponent<CardDisplay>().mainCard = card;
         newCard.GetComponent<CardEffect>().mainCard = card;
     }
 
-    public void AddDropCardPrefab(Card card)
+    private void AddDropCardPrefab(Card card)
     {
         GameObject newCard = GameObject.Instantiate(dropCardPrefab, dropCardStore.transform);
         newCard.GetComponent<DropCardDisplay>().mainCard = card;
     }
 
-    public void RemoveCardPrefab(GameObject obj)
+    private void RemoveCardPrefab(GameObject obj)
     {
         Destroy(obj);
+    }
+
+    private void ShowCount(int bagcount, int discardcount)
+    {
+        areaCount.text = "背包剩余数量: " + bagcount.ToString() + '\n'
+            + "弃牌区数量: " + discardcount.ToString();
     }
 
 
@@ -109,5 +139,8 @@ public class CardAreaUIEventManager : MonoSingleton<CardAreaUIEventManager>
         DropCardAddEvent.AddListener(AddDropCardPrefab);
 
         CardRemoveEvent.AddListener(RemoveCardPrefab);
+        CardRemoveAllEvent.AddListener(ClearAllCard);
+
+        OtherCardAreaCountUpdateEvent.AddListener(ShowCount);
     }
 }

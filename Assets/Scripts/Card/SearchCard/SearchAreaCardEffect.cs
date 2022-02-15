@@ -14,7 +14,7 @@ public class SearchAreaCardEffect : MonoBehaviour
 
     public void CardEffectExecution()
     {
-        SearchCardFunctionManager.instance.SearchAreaCardClickEvent.Invoke(gameObject, mainCard);
-        //Destroy(gameObject);
+        if (ArenaManager.instance.gamePhase == GamePhase.PlayerRoundBegin)
+            SearchCardFunctionManager.instance.SearchAreaCardClickEvent.Invoke(gameObject, mainCard);
     }
 }

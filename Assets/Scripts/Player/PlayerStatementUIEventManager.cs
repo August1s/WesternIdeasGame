@@ -22,8 +22,8 @@ public class PlayerStatementUIEventManager: MonoSingleton<PlayerStatementUIEvent
     public Image actionImage;
 
     public UnityEvent<Player> PlayerValueChangeEvent = new UnityEvent<Player>();
-    
-    public void ShowPlayer(Player player)
+
+    private void ShowPlayer(Player player)
     {
         lifeText.text = player.lifeValue.ToString() + '/' + player.maxLifeValue.ToString();
         spiritText.text = player.spiritValue.ToString() + '/' + player.maxSpiritValue.ToString();

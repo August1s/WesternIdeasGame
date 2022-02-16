@@ -14,7 +14,7 @@ public class SearchCardFunctionManager : MonoSingleton<SearchCardFunctionManager
     public UnityEvent<GameObject, Card> SearchAreaCardClickEvent = new UnityEvent<GameObject, Card>();
 
 
-    public void CardEffectExecution(GameObject cardObj, Card mainCard)
+    private void CardEffectExecution(GameObject cardObj, Card mainCard)
     {
         // 是否可以买得起搜索区中的卡
         if(mainCard.searchValuePayment <= ArenaManager.instance.player.searchValue &&
@@ -42,7 +42,7 @@ public class SearchCardFunctionManager : MonoSingleton<SearchCardFunctionManager
     
     
     // 搜索区牌在被点击后应该被放入手牌中与背包中
-    public void MoveCardToHandArea(GameObject cardObj, Card mainCard)
+    private void MoveCardToHandArea(GameObject cardObj, Card mainCard)
     {
         ArenaManager.instance.cardsInSearchArea.Remove(mainCard);
         CardAreaUIEventManager.instance.CardRemoveEvent.Invoke(cardObj);

@@ -37,7 +37,12 @@ public class CardAreaUIEventManager : MonoSingleton<CardAreaUIEventManager>
     public UnityEvent<int, int> OtherCardAreaCountUpdateEvent = new UnityEvent<int, int>();
 
 
-
+    /// <summary>
+    /// 在一帧时间内清除card store中所有的卡牌prefab
+    /// 
+    /// 由于使用了DestroyImmediate，有可能会对性能有影响？
+    /// </summary>
+    /// <param name="store">对应的要被清空的card store</param>
     private void ClearGridInOneFrame(GameObject store)
     {
         if (store.transform.childCount > 0)

@@ -11,12 +11,13 @@ using UnityEngine;
 
 public class GamePrepare : MonoBehaviour
 {
-    public TextAsset cardData;      // 本地存储的卡牌数据
+    public TextAsset handCardData;      // 本地存储的卡牌数据
+    public TextAsset enemyCardData;     // 本地存储的敌人卡牌数据
 
     public GameObject arenaPrefab;
     public void LoadCardData()
     {
-        string[] dataRow = cardData.text.Split('\n');
+        string[] dataRow = handCardData.text.Split('\n');
         foreach (var row in dataRow)
         {
             if (row == "")
@@ -26,35 +27,71 @@ public class GamePrepare : MonoBehaviour
             if (rowArray[0] == "id")
                 continue;
 
-            Card newCard = new Card();
-            newCard.id = int.Parse(rowArray[0]);
-            newCard.name = rowArray[1];
-            newCard.funcDescription = rowArray[2];
+            Card newcard = new Card();
+            newcard.id = int.Parse(rowArray[0]);
+            newcard.name = rowArray[1];
+            newcard.funcDescription = rowArray[2];
 
-            newCard.lifeValueCost = int.Parse(rowArray[3]);
-            newCard.actionValueCost = int.Parse(rowArray[4]);
-            newCard.spiritValueCost = int.Parse(rowArray[5]);
+            newcard.lifeValueCost = int.Parse(rowArray[3]);
+            newcard.actionValueCost = int.Parse(rowArray[4]);
+            newcard.spiritValueCost = int.Parse(rowArray[5]);
 
-            newCard.searchValuePayment = int.Parse(rowArray[6]);
-            newCard.lifeValuePayment = int.Parse(rowArray[7]);
-            newCard.actionValuePayment = int.Parse(rowArray[8]);
-            newCard.spiritValuePayment = int.Parse(rowArray[9]);
+            newcard.searchValuePayment = int.Parse(rowArray[6]);
+            newcard.lifeValuePayment = int.Parse(rowArray[7]);
+            newcard.actionValuePayment = int.Parse(rowArray[8]);
+            newcard.spiritValuePayment = int.Parse(rowArray[9]);
 
 
-            newCard.haveAttributeEffect = bool.Parse(rowArray[10]);
-            newCard.lifeValueEffect = int.Parse(rowArray[11]);
-            newCard.actionValueEffect = int.Parse(rowArray[12]);
-            newCard.spiritValueEffect = int.Parse(rowArray[13]);
-            newCard.searchValueEffect = int.Parse(rowArray[14]);
+            newcard.haveAttributeEffect = bool.Parse(rowArray[10]);
+            newcard.lifeValueEffect = int.Parse(rowArray[11]);
+            newcard.actionValueEffect = int.Parse(rowArray[12]);
+            newcard.spiritValueEffect = int.Parse(rowArray[13]);
+            newcard.searchValueEffect = int.Parse(rowArray[14]);
 
-            newCard.haveHandCardEffect = bool.Parse(rowArray[15]);
-            newCard.drawNewCard = int.Parse(rowArray[16]);
+            newcard.haveHandCardEffect = bool.Parse(rowArray[15]);
+            newcard.drawNewCard = int.Parse(rowArray[16]);
 
-            newCard.haveEnemyEffect = bool.Parse(rowArray[17]);
-            newCard.damageEffectToEnemy = int.Parse(rowArray[18]);
+            newcard.haveEnemyEffect = bool.Parse(rowArray[17]);
+            newcard.damageEffectToEnemy = int.Parse(rowArray[18]);
 
             //Debug.Log(newCard.name);
-            Global.cardDataBase.Add(newCard);
+            Global.cardDataBase.Add(newcard);
+        }
+    }
+
+
+    public void LoadEnemyCardData()
+    {
+        string[] dataRow = enemyCardData.text.Split('\n');
+        foreach (var row in dataRow)
+        {
+            if (row == "")
+                continue;
+            string[] rowArray = row.Split(',');
+            if (rowArray[0] == "id")
+                continue;
+
+            EnemyCard newcard = new EnemyCard();
+            newcard.id = int.Parse(rowArray[0]);
+            newcard.name = rowArray[1];
+            newcard.funcDescription = rowArray[2];
+            newcard.user = rowArray[3];
+
+            newcard.lifeValueEffect = int.Parse(rowArray[4]);
+            newcard.actionValueEffect = int.Parse(rowArray[5]);
+            newcard.spiritValueEffect = int.Parse(rowArray[6]);
+            newcard.searchValueEffect = int.Parse(rowArray[7]);
+            newcard.lifeMaxValueEffect = int.Parse(rowArray[8]);
+            newcard.actionMaxValueEffect = int.Parse(rowArray[9]);
+            newcard.spiritMaxValueEffect = int.Parse(rowArray[10]);
+
+            newcard.selfLifeValueEffect = int.Parse(rowArray[11]);
+
+            if(!Global.enemyCardDataBase.ContainsKey(newcard.user))
+            {
+                Global.enemyCardDataBase.Add(newcard.user, new List<EnemyCard>());
+            }
+            Global.enemyCardDataBase[newcard.user].Add(newcard);
         }
     }
 
@@ -72,6 +109,7 @@ public class GamePrepare : MonoBehaviour
     void Awake()
     {
         LoadCardData();
+        LoadEnemyCardData();
     }
 
     // Start is called before the first frame update

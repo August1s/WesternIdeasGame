@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Card\SearchCard\SearchCardFunctionManager.cs" />
     <Compile Include="Assets\Scripts\CardArea\CardAreaUIEventManager.cs" />
+    <Compile Include="Assets\Scripts\Player\EnemyUIEventManager.cs" />
     <Compile Include="Assets\Scripts\Card\HandCard\CardDisplay.cs" />
     <Compile Include="Assets\Scripts\GamePrepare.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerStatementUIEventManager.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Assets\Scripts\Card\CardEnlarge.cs" />
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Global.cs" />
+    <Compile Include="Assets\Scripts\Player\Enemy.cs" />
     <Compile Include="Assets\Scripts\Card\HandCard\HandCardFunctionManager.cs" />
     <Compile Include="Assets\Scripts\Arena\ArenaManager.cs" />
     <Compile Include="Assets\Scripts\MonoSingleton.cs" />
@@ -72,8 +74,9 @@
     <Compile Include="Assets\Scripts\Card\SearchCard\SearchAreaCardEffect.cs" />
     <Compile Include="Assets\Scripts\CardArea\ShowAllCards.cs" />
     <Compile Include="Assets\Scripts\Card\Card.cs" />
-    <Compile Include="Assets\Scripts\Player\Enemy.cs" />
-    <Compile Include="Assets\Scripts\Player\EnemyUIEventManager.cs" />
+    <Compile Include="Assets\Scripts\Card\EnemyCard\EnemyCard.cs" />
+    <Compile Include="Assets\Scripts\Card\EnemyCard\EnemyCardDisplay.cs" />
+    <Compile Include="Assets\Scripts\Card\EnemyCard\EnemyCardFunctionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

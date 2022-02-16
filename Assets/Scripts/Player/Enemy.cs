@@ -12,4 +12,7 @@ public class Enemy
 {
     public string name;
     public int lifeValue;
+
+    // 敌人所拥有的卡牌
+    public List<EnemyCard> cards;
 }

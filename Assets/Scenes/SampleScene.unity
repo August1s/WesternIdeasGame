@@ -838,11 +838,11 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 495381965}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1310247022}
+  m_Father: {fileID: 1142510479}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -1471,6 +1471,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1310247022}
+  - {fileID: 495381966}
   m_Father: {fileID: 1861684211}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1600,7 +1601,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0530bd1a06669249b62c139bfe11b94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardData: {fileID: 4900000, guid: 9dcb239bfd563b044811d8da51af6e70, type: 3}
+  handCardData: {fileID: 4900000, guid: 9dcb239bfd563b044811d8da51af6e70, type: 3}
+  enemyCardData: {fileID: 4900000, guid: 9e678c363cfdd5c409e8295e019cd63a, type: 3}
   arenaPrefab: {fileID: 0}
 --- !u!1 &1310247021
 GameObject:
@@ -1632,7 +1634,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1664208944}
-  - {fileID: 495381966}
   m_Father: {fileID: 1142510479}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2196,7 +2197,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyName: {fileID: 495381967}
   lifeText: {fileID: 1664208945}
+  enemyCardStore: {fileID: 399769534}
+  enemyCardPrefab: {fileID: 7938145891623781888, guid: 773a45924d46ff7439c6771cea487fcb, type: 3}
   EnemyValueChangeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  EnemyCardChangeEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &1895307669
@@ -2598,6 +2604,7 @@ GameObject:
   - component: {fileID: 4610988561231468326}
   - component: {fileID: 4610988561231468325}
   - component: {fileID: 4610988561231468324}
+  - component: {fileID: 4610988561231468318}
   - component: {fileID: 4610988561231468316}
   - component: {fileID: 4610988561231468315}
   - component: {fileID: 4610988561231468317}
@@ -2657,6 +2664,9 @@ MonoBehaviour:
   CardRemoveEvent:
     m_PersistentCalls:
       m_Calls: []
+  CardRemoveAllEvent:
+    m_PersistentCalls:
+      m_Calls: []
   areaCount: {fileID: 212521295}
   OtherCardAreaCountUpdateEvent:
     m_PersistentCalls:
@@ -2681,6 +2691,21 @@ MonoBehaviour:
   spiritImage: {fileID: 1538225029}
   actionImage: {fileID: 1555308878}
   PlayerValueChangeEvent:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &4610988561231468318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4610988561231468314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09665126f520e624a9e9a74023b20ae5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyCardExecuteEvent:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &4610988561231468324

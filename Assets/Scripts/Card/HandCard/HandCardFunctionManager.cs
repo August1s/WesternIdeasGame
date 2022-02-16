@@ -15,7 +15,7 @@ public class HandCardFunctionManager : MonoSingleton<HandCardFunctionManager>
 
 
     // 手牌在被点击后，应该先结算属性变化，然后放入出牌区中
-    public void CardEffectExecution(GameObject cardObj, Card mainCard)
+    private void CardEffectExecution(GameObject cardObj, Card mainCard)
     {
         if (mainCard.lifeValueCost <= ArenaManager.instance.player.lifeValue &&
             mainCard.actionValueCost <= ArenaManager.instance.player.actionValue &&
@@ -27,8 +27,6 @@ public class HandCardFunctionManager : MonoSingleton<HandCardFunctionManager>
                 ArenaManager.instance.gamePhase = GamePhase.GameEnd;
                 Debug.Log("----游戏结束----");
             }
-                
-
             ArenaManager.instance.player.actionValue -= mainCard.actionValueCost;
             ArenaManager.instance.player.spiritValue -= mainCard.spiritValueCost;
 
@@ -44,7 +42,6 @@ public class HandCardFunctionManager : MonoSingleton<HandCardFunctionManager>
 
 
             PlayerStatementUIEventManager.instance.PlayerValueChangeEvent.Invoke(ArenaManager.instance.player);
-
             EnemyUIEventManager.instance.EnemyValueChangeEvent.Invoke(ArenaManager.instance.enemy);
             
 
@@ -71,8 +68,16 @@ public class HandCardFunctionManager : MonoSingleton<HandCardFunctionManager>
     }
 
     
-
-    public void SelfAttributeValueEffect(int lifeEffect, int actionEffect, int spiritEffect, int searchEffect)
+    /// <summary>
+    /// 卡牌对玩家自身属性值的影响
+    /// 
+    /// 后期会加入对上限的影响？
+    /// </summary>
+    /// <param name="lifeEffect">生命值影响</param>
+    /// <param name="actionEffect">行动值影响</param>
+    /// <param name="spiritEffect">精神值影响</param>
+    /// <param name="searchEffect">搜索值影响</param>
+    private void SelfAttributeValueEffect(int lifeEffect, int actionEffect, int spiritEffect, int searchEffect)
     {
         ArenaManager.instance.player.lifeValue += Mathf.Min(
             lifeEffect, ArenaManager.instance.player.maxLifeValue - ArenaManager.instance.player.lifeValue);
@@ -104,7 +109,7 @@ public class HandCardFunctionManager : MonoSingleton<HandCardFunctionManager>
     /// 对敌方属性值的影响
     /// </summary>
     /// <param name="damageEffect">生命值影响</param>
-    public void EnemyAttributeValueEffect(int damageEffect)
+    private void EnemyAttributeValueEffect(int damageEffect)
     {
         ArenaManager.instance.enemy.lifeValue -= damageEffect;
         if (ArenaManager.instance.enemy.lifeValue <= 0)
@@ -120,7 +125,7 @@ public class HandCardFunctionManager : MonoSingleton<HandCardFunctionManager>
     /// 如果剩余牌堆中已经没有足够抽的牌，那么先将牌抽取掉，然后洗切废牌堆作为新的牌堆，再进行抽取
     /// </summary>
     /// <param name="drawNewCard">抽卡数量</param>
-    public void HandCardEffect(int drawNewCard)
+    private void HandCardEffect(int drawNewCard)
     {
         for(int i = 0; i < drawNewCard; i++)
         {

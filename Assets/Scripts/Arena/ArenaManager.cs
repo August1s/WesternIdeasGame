@@ -30,10 +30,15 @@ public enum GamePhase
 public class ArenaManager : MonoSingleton<ArenaManager>
 {
     public GamePhase gamePhase = GamePhase.GameLoad;
+
+    private int rountCount = 0;
     
     public Player player = new Player();
 
     public Enemy enemy = new Enemy();
+
+    // 敌方boss每回合开始时翻出的牌
+    public EnemyCard cardInEnemyArea = null;
     
     // 公共搜索区中的卡牌
     public List<Card> cardsInSearchArea = new List<Card>();
@@ -62,7 +67,7 @@ public class ArenaManager : MonoSingleton<ArenaManager>
         }
     }
 
-    #region 回合数据初始化
+    #region 数据初始化
 
     /// <summary>
     /// 初始化玩家，初始化玩家背包用于生成手牌，初始化玩家搜索池用于生成搜索区
@@ -99,44 +104,15 @@ public class ArenaManager : MonoSingleton<ArenaManager>
     }
 
     /// <summary>
-    /// 生成搜索区牌
-    /// 
-    /// 后期需要加入概率，需要根据精神值进行生成对应的搜索区牌
-    /// </summary>
-    public void InitSearchAreaCards()
-    {
-        for (int i = 0; i < 5; i++)
-        {
-            cardsInSearchArea.Add(player.cardsInSearchPool.Keys.ToArray()[Random.Range(0, player.cardsInSearchPool.Count)]);
-        }
-
-        CardAreaUIEventManager.instance.SearchCardsAreaRefreshEvent.Invoke();
-    }
-
-    /// <summary>
-    /// 手牌初始化，手牌来自背包，当背包数量<5时，将背包里的牌全部放到手牌中
-    /// 手牌初始化后期可能会被调整到回合开始阶段
-    /// </summary>
-    public void InitHandAreaCards()
-    {
-        int cardnum = Mathf.Min(5, player.cardsInPlayerBag.Count);
-        for (int i = 0; i < cardnum; i++)
-        {
-            cardsInHandArea.Add(player.cardsInPlayerBag[i]);
-        }
-        player.cardsInPlayerBag.RemoveRange(0, cardnum);
-
-        CardAreaUIEventManager.instance.HandCardsAreaRefreshEvent.Invoke();
-        CardAreaUIEventManager.instance.OtherCardAreaCountUpdateEvent.Invoke(player.cardsInPlayerBag.Count, discardArea.Count);
-    }
-
-    /// <summary>
     /// 初始化敌人
+    /// 
+    /// 敌人卡牌组根据敌人名称进行读取
     /// </summary>
     public void InitEnemyData()
     {
         enemy.name = "狂热的村民";
         enemy.lifeValue = 20;
+        enemy.cards = Global.enemyCardDataBase[enemy.name];
 
         EnemyUIEventManager.instance.EnemyValueChangeEvent.Invoke(enemy);
     }
@@ -183,7 +159,10 @@ public class ArenaManager : MonoSingleton<ArenaManager>
         {
             gamePhase = GamePhase.EnemyRoundBegin;
             Debug.Log("----敌方回合开始----");
-            // 敌人的行为
+
+            // 结算敌人卡牌
+            EnemyCardFunctionManager.instance.EnemyCardExecuteEvent.Invoke(cardInEnemyArea);
+
             Debug.Log("----敌方回合结束----");
 
             PreparePlayerRound();
@@ -194,8 +173,9 @@ public class ArenaManager : MonoSingleton<ArenaManager>
     /// 玩家回合准备，应该在敌人回合结束后执行
     /// 
     /// 回合开始前，搜索区生成新搜索牌，手牌区生成新手牌，行动值刷新至上限
+    /// 回合开始前，敌方会翻出一张攻击卡片
     /// 
-    /// 后期可能会加入一些跨回合的收益
+    /// 后期可能会加入一些跨回合的收益，搜索牌的概率等
     /// </summary>
     public void PreparePlayerRound()
     {
@@ -211,7 +191,7 @@ public class ArenaManager : MonoSingleton<ArenaManager>
 
         // 生成手牌
         int remainingNumOfBag = player.cardsInPlayerBag.Count;
-        if (remainingNumOfBag > 5)
+        if (remainingNumOfBag >= 5)
         {
             for (int i = 0; i < 5; i++)
             {
@@ -265,10 +245,16 @@ public class ArenaManager : MonoSingleton<ArenaManager>
         CardAreaUIEventManager.instance.SearchCardsAreaRefreshEvent.Invoke();
 
 
+        // 敌方翻出攻击牌
+        cardInEnemyArea = ((rountCount+1)% 4) == 0 ? enemy.cards[1] : enemy.cards[0];  // 狂热村民的攻击循环是1112 1112
+        EnemyUIEventManager.instance.EnemyCardChangeEvent.Invoke(cardInEnemyArea);
+        
+
         Debug.Log("----玩家回合准备完成----");
 
         gamePhase = GamePhase.PlayerRoundBegin;
-        Debug.Log("----玩家回合开始----");
+        rountCount += 1;
+        Debug.Log("----玩家第" + rountCount.ToString() + "回合开始----");
 
     }
 
@@ -283,8 +269,6 @@ public class ArenaManager : MonoSingleton<ArenaManager>
         InitEnemyData();
         Debug.Log("----对战准备完成----");
 
-        //InitSearchAreaCards();
-        //InitHandAreaCards();
         PreparePlayerRound();
         
     }

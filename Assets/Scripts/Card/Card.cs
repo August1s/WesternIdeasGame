@@ -24,10 +24,10 @@ public class Card
     // 数值化效果
     // 对玩家的属性值的影响
     public bool haveAttributeEffect;
-    public int lifeValueEffect;     // 对自身生命值的影响
-    public int actionValueEffect;   // 对自身行动值的影响
-    public int spiritValueEffect;    // 对自身精神值的影响
-    public int searchValueEffect;   // 对自身搜索值的影响
+    public int lifeValueEffect;     // 对玩家自身生命值的影响
+    public int actionValueEffect;   // 对玩家自身行动值的影响
+    public int spiritValueEffect;    // 对玩家自身精神值的影响
+    public int searchValueEffect;   // 对玩家自身搜索值的影响
 
     // 对手牌的影响
     public bool haveHandCardEffect;
